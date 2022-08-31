@@ -1,0 +1,22 @@
+name: 'Delete Expo Branch'
+description: 'Delete the associated Expo branch'
+
+inputs:
+  branch:
+    description: 'What Expo branch to delete if non-default'
+    required: false
+
+
+runs:
+  using: 'composite'
+  steps:
+    - name: Get branch name
+      id: get_ref
+      uses: dmsi-io/gha-get-ref@main
+      with:
+        custom_ref: ${{ inputs.branch }}
+
+    - name: Clean up branch
+      # json acts as a --non-interactive flag. Output is ignored
+      run: eas branch:delete --json ${{ steps.get_ref.outputs.ref_name }}
+      shell: bash
