@@ -5,11 +5,21 @@ inputs:
   branch:
     description: 'What Expo branch to delete if non-default'
     required: false
+  token:
+    description: 'Token for logging in to Expo'
+    required: true
 
 
 runs:
   using: 'composite'
   steps:
+    - name: Expo login
+      uses: expo/expo-github-action@v7
+      with:
+        expo-version: latest
+        eas-version: latest
+        token: ${{ inputs.token }}
+
     - name: Get branch name
       id: get_ref
       uses: dmsi-io/gha-get-ref@main
