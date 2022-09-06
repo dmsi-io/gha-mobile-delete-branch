@@ -26,7 +26,13 @@ runs:
       with:
         custom_ref: ${{ inputs.branch }}
 
+    - name: Clean up channel
+      continue-on-error: true
+      run: eas channel:delete --non-interactive "${{ steps.get_ref.outputs.ref_name }}"
+      shell: bash
+
     - name: Clean up branch
-      # json acts as a --non-interactive flag. Output is ignored
-      run: eas branch:delete --json "${{ steps.get_ref.outputs.ref_name }}" || true
+      # json acts as a --non-interactive flag
+      continue-on-error: true
+      run: eas branch:delete --json "${{ steps.get_ref.outputs.ref_name }}"
       shell: bash
